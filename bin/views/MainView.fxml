@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="500.0" spacing="20.0" style="-fx-background-color: #F8F9FA;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TodoController">
+   <children>
+      <MenuBar style="-fx-background-color: #FFFFFF; -fx-border-color: #E0E0E0; -fx-border-width: 0 0 1 0;">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+
+      <VBox spacing="5.0">
+         <padding>
+            <Insets left="30.0" right="30.0" top="10.0" />
+         </padding>
+         <children>
+            <Label text="Daftar Kegiatan Harian" textFill="#212529">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label text="Centang kegiatan yang sudah selesai." textFill="#6C757D">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Separator prefWidth="200.0">
+               <VBox.margin>
+                  <Insets top="10.0" bottom="10.0" />
+               </VBox.margin>
+            </Separator>
+         </children>
+      </VBox>
+
+      <HBox spacing="10.0" alignment="CENTER">
+         <padding>
+            <Insets left="30.0" right="30.0" />
+         </padding>
+         <children>
+            <TextField fx:id="inputKegiatan" promptText="Masukkan kegiatan baru..." style="-fx-background-color: #FFFFFF; -fx-border-color: #CED4DA; -fx-border-radius: 5; -fx-background-radius: 5; -fx-padding: 10;" HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnTambah" mnemonicParsing="false" onAction="#handleTambah" text="+ Tambah" style="-fx-background-color: #0D6EFD; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 10 20; -fx-cursor: hand;" />
+         </children>
+      </HBox>
+
+      <VBox VBox.vgrow="ALWAYS">
+         <padding>
+            <Insets left="30.0" right="30.0" />
+         </padding>
+         <children>
+            <ListView fx:id="listViewKegiatan" style="-fx-background-color: #FFFFFF; -fx-border-color: #CED4DA; -fx-border-radius: 5; -fx-background-radius: 5;" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+
+      <HBox alignment="CENTER_RIGHT" spacing="10.0">
+         <padding>
+            <Insets bottom="20.0" left="30.0" right="30.0" />
+         </padding>
+         <children>
+            <Button fx:id="btnHapus" mnemonicParsing="false" onAction="#handleHapus" text="Hapus Terpilih" style="-fx-background-color: #DC3545; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 10 20; -fx-cursor: hand;" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

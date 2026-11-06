@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch TodoApp",
+            "request": "launch",
+            "mainClass": "application.Main",
+            "projectName": "TodoAppJavaFX_a9002004",
+            "vmArgs": "--module-path \"${workspaceFolder}/lib\" --add-modules javafx.controls,javafx.fxml --enable-native-access=javafx.graphics"
+        }
+    ]
+}
