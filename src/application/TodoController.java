@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.Text;
 
 public class TodoController {
 
@@ -27,22 +28,25 @@ public class TodoController {
         // PASANG CUSTOM CELL FACTORY
         listViewKegiatan.setCellFactory(param -> new ListCell<TodoItem>() {
             private final CheckBox checkBox = new CheckBox();
-            private final Label label = new Label();
-            private final HBox container = new HBox(10, checkBox, label);
+            // Gunakan Text (bukan Label) agar mendukung strikethrough
+            private final Text textNode = new Text();
+            private final HBox container = new HBox(10, checkBox, textNode);
 
             {
-                // Atur agar label mengisi sisa ruang
-                HBox.setHgrow(label, Priority.ALWAYS);
+                HBox.setHgrow(textNode, Priority.ALWAYS);
                 container.setStyle("-fx-padding: 5 0 5 0; -fx-alignment: center-left;");
-                
+
                 // Event Listener: Saat CheckBox diklik
                 checkBox.setOnAction(event -> {
                     TodoItem item = getItem();
                     if (item != null) {
-                        // Jika dicentang -> 'done', jika tidak -> 'todo'
                         String newStatus = checkBox.isSelected() ? "done" : "todo";
+                        // 1. Update ke database
                         model.updateStatus(item, newStatus);
-                        updateLabelStyle(item);
+                        // 2. Update status di objek memori
+                        item.setStatus(newStatus);
+                        // 3. Update tampilan teks secara langsung
+                        updateTextStyle(item);
                     }
                 });
             }
@@ -53,24 +57,29 @@ public class TodoController {
                 if (empty || item == null) {
                     setGraphic(null);
                 } else {
-                    label.setText(item.getTitle());
-                    // Set checkbox state berdasarkan status di database
+                    textNode.setText(item.getTitle());
+                    // Sinkronkan status checkbox dengan data
                     checkBox.setSelected(item.getStatus().equals("done"));
-                    updateLabelStyle(item);
+                    updateTextStyle(item);
                     setGraphic(container);
                 }
             }
 
             // Helper untuk mencoret teks jika selesai
-            private void updateLabelStyle(TodoItem item) {
+            private void updateTextStyle(TodoItem item) {
                 if (item.getStatus().equals("done")) {
-                    label.setStyle("-fx-text-fill: #ADB5BD; -fx-strikethrough: true;");
+                    // Teks abu-abu dan dicoret
+                    textNode.setStyle("-fx-fill: #ADB5BD;");
+                    textNode.setStrikethrough(true);
                 } else {
-                    label.setStyle("-fx-text-fill: #212529; -fx-strikethrough: false;");
+                    // Teks normal
+                    textNode.setStyle("-fx-fill: #212529;");
+                    textNode.setStrikethrough(false);
                 }
             }
         });
 
+        // Fitur UX: Nonaktifkan tombol Hapus jika tidak ada item yang dipilih
         btnHapus.setDisable(true);
         listViewKegiatan.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             btnHapus.setDisable(newVal == null);
@@ -80,10 +89,12 @@ public class TodoController {
     @FXML
     void handleTambah(ActionEvent event) {
         String kegiatanBaru = inputKegiatan.getText().trim();
+
         if (kegiatanBaru.isEmpty()) {
             showAlert("Kegiatan tidak boleh kosong!");
             return;
         }
+
         model.tambahKegiatan(kegiatanBaru);
         inputKegiatan.clear();
     }
